@@ -1,6 +1,7 @@
 import re
 
 from creole import Parser
+from django.conf import settings
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
@@ -187,7 +188,11 @@ class BiblionHtmlEmitter(PygmentsHtmlEmitter, ImageLookupHtmlEmitter):
 
 
 def parse(text, emitter=HtmlEmitter):
-    return emitter(Parser(text).parse()).emit()
+    default_parser = getattr(settings, "BIBLION_PARSER", "Creole")
+    if default_parser is None:
+        return text
+    if default_parser == "Creole":
+        return emitter(Parser(text).parse()).emit()
 
 
 def parse_with_highlighting(text, emitter=PygmentsHtmlEmitter):
