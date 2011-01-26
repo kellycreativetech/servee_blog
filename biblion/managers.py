@@ -4,7 +4,6 @@ from django.db.models.query import Q
 from biblion.exceptions import InvalidSection
 from biblion.settings import ALL_SECTION_NAME
 
-
 class PostManager(models.Manager):
     
     def published(self):
@@ -18,12 +17,7 @@ class PostManager(models.Manager):
         if queryset is None:
             queryset = self.published()
         
-        if not value:
+        if not value or value == ALL_SECTION_NAME:
             return queryset
         else:
-            try:
-                section_idx = self.model.section_idx(value)
-            except KeyError:
-                raise InvalidSection
-            all_sections = Q(section=self.model.section_idx(ALL_SECTION_NAME))
-            return queryset.filter(all_sections | Q(section=section_idx))
+            return queryset.filter(Q(section__slug=ALL_SECTION_NAME) | Q(section__slug=value))
