@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.conf import settings
 from django.utils.functional import curry
 
 from biblion.models import Post, Image
@@ -30,6 +31,11 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline,
     ]
+    
+    def __init__(self, *args, **kwargs):
+        if "taggit" in settings.INSTALLED_APPS:
+            self.fields.append("tags")
+        super(PostAdmin, self).__init__(*args, **kwargs)
     
     def published_flag(self, obj):
         return bool(obj.published)
