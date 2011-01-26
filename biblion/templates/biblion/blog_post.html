@@ -1,0 +1,25 @@
+{% extends "biblion/blog_base.html" %}
+{% block head_title %}{{ post.title }} &mdash; Aetna Plastics{% endblock %}
+
+
+{% block primary %}
+	<div class="blogPost">
+    <h2>{{ post.title }}</h2>
+	{% if post.images.count > 0 %}
+	<div class="floatBox">
+	{% for im in post.images.all %}
+	    <img src="{{ im }}" width="{{ im.width }}" height="{{ im.height }}" />
+    {% endfor %}
+	</div>
+	{% endif %}
+   
+    {{ post.content_html|safe }}
+    {% include "biblion/dateline.html" %}  
+    </div>  
+{% endblock %}
+
+
+
+
+
+
