@@ -20,4 +20,5 @@ class PostManager(models.Manager):
         if not value or value == ALL_SECTION_NAME:
             return queryset
         else:
-            return queryset.filter(Q(section__slug=ALL_SECTION_NAME) | Q(section__slug=value))
+            print queryset.all()
+            return queryset.filter(Q(sections__slug=ALL_SECTION_NAME) | Q(sections__slug=value))

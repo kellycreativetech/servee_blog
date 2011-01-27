@@ -11,19 +11,23 @@ class ImageInline(admin.TabularInline):
     model = Image
     fields = ["image_path"]
 
+class SectionAdmin(admin.ModelAdmin):
+    list_display = ["name",]
+    fields = ["name", "slug"]
+    prepopulated_fields = {"slug": ("name",)}
 
 class PostAdmin(admin.ModelAdmin):  
-    list_display = ["title", "published_flag", "section"]
-    list_filter = ["section"]
+    list_display = ["title", "published_flag",]
+    list_filter = ["sections",]
     form = AdminPostForm
     fields = [
-        "section",
         "title",
         "slug",
         "author",
         "teaser",
         "content",
         "publish",
+        "sections",
     ]
     if can_tweet():
         fields.append("tweet")
@@ -64,4 +68,4 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Image)
-admin.site.register(Section)
+admin.site.register(Section, SectionAdmin)
