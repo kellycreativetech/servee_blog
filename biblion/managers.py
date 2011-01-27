@@ -12,12 +12,12 @@ class PostManager(models.Manager):
     def current(self):
         return self.published().order_by("-published")
     
-    def section(self, value, queryset=None):
+    def section(self, value=None, queryset=None):
         
         if queryset is None:
             queryset = self.published()
         
-        if not value or value == ALL_SECTION_NAME:
+        if value is None or (value == ALL_SECTION_NAME):
             return queryset
         else:
             print queryset.all()
