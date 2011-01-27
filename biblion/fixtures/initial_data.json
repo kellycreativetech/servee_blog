@@ -1,0 +1,10 @@
+[
+    {
+        "model": "biblion.Section",
+        "pk": 1,
+        "fields": {
+            "name": "All",
+            "slug": "all"
+        }
+    }
+]

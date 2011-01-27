@@ -10,7 +10,7 @@ from django.utils import simplejson as json
 from django.contrib.sites.models import Site
 
 from biblion.exceptions import InvalidSection
-from biblion.models import Post, FeedHit
+from biblion.models import Post, FeedHit, Section
 from biblion.settings import ALL_SECTION_NAME
 
 
@@ -25,15 +25,13 @@ def blog_index(request):
 
 def blog_section_list(request, section):
     
-    try:
-        posts = Post.objects.section(section)
-    except InvalidSection:
-        raise Http404()
+    section = get_object_or_404(Section, slug=section)
     
     return render_to_response("biblion/blog_section_list.html", {
-        "section_slug": section,
-        "section_name": dict(Post.SECTION_CHOICES)[Post.section_idx(section)],
-        "posts": posts,
+        "section_slug": section.slug,
+        "section_name": section.name,
+        "section": section,
+        "posts": Post.objects.section(section.slug),
     }, context_instance=RequestContext(request))
 
 

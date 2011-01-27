@@ -18,7 +18,6 @@ except ImportError:
     twitter = None
 
 from biblion.managers import PostManager
-from biblion.settings import ALL_SECTION_NAME, SECTIONS
 from biblion.utils import can_tweet
 
 
@@ -27,12 +26,16 @@ def ig(L, i):
     for x in L:
         yield x[i]
 
+class Section(models.Model):
+    slug = models.SlugField(max_length=32, unique=True)
+    name = models.CharField(max_length=32)
+    
+    def __unicode__(self):
+        return u"%s" % self.name
 
 class Post(models.Model):
     
-    SECTION_CHOICES = [(1, ALL_SECTION_NAME)] + zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 1))
-    
-    section = models.IntegerField(choices=SECTION_CHOICES)
+    section = models.ForeignKey(Section, related_name="posts", default=1)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
@@ -52,21 +55,19 @@ class Post(models.Model):
     @staticmethod
     def section_idx(slug):
         """
-        given a slug return the index for it
+        given a slug return the index for it, pratically only for backwards compatability
         """
-        if slug == ALL_SECTION_NAME:
-            return 1
-        return dict(zip(ig(SECTIONS, 0), range(2, 2 + len(SECTIONS))))[slug]
+        try:
+            return Section.objects.get(slug=slug).pk
+        except Section.DoesNotExist:
+            return None
     
     @property
     def section_slug(self):
         """
-        an IntegerField is used for storing sections in the database so we
-        need a property to turn them back into their slug form
+        For Backwards compatability
         """
-        if self.section == 1:
-            return ALL_SECTION_NAME
-        return dict(zip(range(2, 2 + len(SECTIONS)), ig(SECTIONS, 0)))[self.section]
+        return self.section.slug
     
     def rev(self, rev_id):
         return self.revisions.get(pk=rev_id)
