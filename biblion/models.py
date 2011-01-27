@@ -41,7 +41,7 @@ class Section(models.Model):
 
 class Post(models.Model):
     
-    section = models.ManyToManyField(Section, related_name="posts", default=1)
+    sections = models.ManyToManyField(Section, related_name="posts", default=1)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
