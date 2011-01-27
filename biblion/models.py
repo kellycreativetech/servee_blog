@@ -17,6 +17,12 @@ try:
 except ImportError:
     twitter = None
 
+if "taggit" in settings.INSTALLED_APPS:
+    from taggit.managers import TaggableManager
+else:
+    def TaggableManager():
+        return None
+
 from biblion.managers import PostManager
 from biblion.utils import can_tweet
 
@@ -51,6 +57,7 @@ class Post(models.Model):
     published = models.DateTimeField(null=True, blank=True, editable=False) # when last published
     
     view_count = models.IntegerField(default=0, editable=False)
+    tags = TaggableManager()
     
     @staticmethod
     def section_idx(slug):
