@@ -12,13 +12,16 @@ class PostManager(models.Manager):
     def current(self):
         return self.published().order_by("-published")
     
-    def section(self, value=None, queryset=None):
+    def section(self, value, queryset=None):
         
         if queryset is None:
             queryset = self.published()
         
-        if value is None or (value == ALL_SECTION_NAME):
+        if not value or (value == ALL_SECTION_NAME):
+            print queryset
             return queryset
         else:
-            print queryset.all()
-            return queryset.filter(Q(sections__slug=ALL_SECTION_NAME) | Q(sections__slug=value))
+            print queryset
+            a = queryset.filter(Q(sections__slug=ALL_SECTION_NAME) | Q(sections__slug=value))
+            print a
+            return a
