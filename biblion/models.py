@@ -35,6 +35,7 @@ def ig(L, i):
 class Section(models.Model):
     slug = models.SlugField(max_length=32, unique=True)
     name = models.CharField(max_length=32)
+    content = models.TextField(blank=True, null=True)
     
     def __unicode__(self):
         return u"%s" % self.name
