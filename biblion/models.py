@@ -187,6 +187,9 @@ class Image(models.Model):
     
     timestamp = models.DateTimeField(default=datetime.now, editable=False)
     
+    class Meta:
+        ordering = ("image_path",)
+    
     def __unicode__(self):
         if self.pk is not None:
             return "{{ %d }}" % self.pk
