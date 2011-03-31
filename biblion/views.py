@@ -14,20 +14,20 @@ from biblion.models import Post, FeedHit, Section
 from biblion.settings import ALL_SECTION_NAME
 
 
-def blog_index(request):
+def blog_index(request, template="biblion/blog_list.html"):
     
     posts = Post.objects.current()
     
-    return render_to_response("biblion/blog_list.html", {
+    return render_to_response(template, {
         "posts": posts,
     }, context_instance=RequestContext(request))
 
 
-def blog_section_list(request, section):
+def blog_section_list(request, section, template="biblion/blog_section_list.html"):
     
     section = get_object_or_404(Section, slug=section)
     
-    return render_to_response("biblion/blog_section_list.html", {
+    return render_to_response(template, {
         "section_slug": section.slug,
         "section_name": section.name,
         "section": section,

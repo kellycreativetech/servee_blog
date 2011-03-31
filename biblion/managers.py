@@ -1,10 +1,18 @@
+from django.conf import settings
 from django.db import models
 from django.db.models.query import Q
 
 from biblion.exceptions import InvalidSection
 from biblion.settings import ALL_SECTION_NAME
 
-class PostManager(models.Manager):
+class SiteManager(models.Manager):
+    """
+    A simple manager for maintaining the current site separately from other sites.
+    """
+    def get_query_set(self, *args, **kwargs):
+        return super(SiteManager, self).get_query_set(*args, **kwargs).filter(site=settings.SITE_ID)
+
+class PostManager(SiteManager):
     
     def published(self):
         return self.exclude(published=None)

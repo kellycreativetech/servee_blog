@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 # see requirements.txt for dependencies
 
@@ -6,7 +6,7 @@ from distutils.core import setup
 
 setup(
     name = "biblion",
-    version = "0.1.dev10",
+    version = "0.1.1.dev7",
     author = "Eldarion",
     author_email = "development@eldarion.com",
     description = "the eldarion.com blog app intended to be suitable for site-level company and project blogs",
@@ -16,10 +16,13 @@ setup(
     packages = [
         "biblion",
         "biblion.templatetags",
+        "biblion.migrations",
     ],
     package_data = {
         "biblion": [
             "templates/biblion/*.xml",
+            "templates/biblion/*.html",
+            "fixtures/*.json",
         ]
     },
     classifiers = [

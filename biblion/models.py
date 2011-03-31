@@ -23,7 +23,7 @@ else:
     def TaggableManager():
         return None
 
-from biblion.managers import PostManager
+from biblion.managers import PostManager, SiteManager
 from biblion.utils import can_tweet
 
 
@@ -36,13 +36,21 @@ class Section(models.Model):
     slug = models.SlugField(max_length=32, unique=True)
     name = models.CharField(max_length=32)
     content = models.TextField(blank=True, null=True)
+    site = models.ForeignKey(Site, blank=True, null=True)
     
     def __unicode__(self):
         return u"%s" % self.name
+    
+    def save(self, *args, **kwargs):
+        self.site = Site.objects.get_current()
+        super(Section, self).save(*args, **kwargs)
+    
+    objects = SiteManager()
 
 class Post(models.Model):
     
     sections = models.ManyToManyField(Section, related_name="posts")
+    site = models.ForeignKey(Site, blank=True, null=True)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
@@ -130,6 +138,7 @@ class Post(models.Model):
     
     def save(self, **kwargs):
         self.updated_at = datetime.now()
+        self.site = Site.objects.get_current()
         super(Post, self).save(**kwargs)
     
     def get_absolute_url(self):
@@ -170,6 +179,8 @@ class Revision(models.Model):
     
     view_count = models.IntegerField(default=0, editable=False)
     
+    # objects = SiteManager()
+    
     def __unicode__(self):
         return 'Revision %s for %s' % (self.updated.strftime('%Y%m%d-%H%M'), self.post.slug)
     
@@ -184,8 +195,11 @@ class Image(models.Model):
     
     image_path = models.ImageField(upload_to="images/%Y/%m/%d")
     url = models.CharField(max_length=150, blank=True)
-    
     timestamp = models.DateTimeField(default=datetime.now, editable=False)
+    
+    site = models.ForeignKey(Site, blank=True, null=True)
+    
+    objects = SiteManager()
     
     class Meta:
         ordering = ("image_path",)
@@ -196,8 +210,17 @@ class Image(models.Model):
         else:
             return "deleted image"
 
+    def save(self, *args, **kwargs):
+        self.site = Site.objects.get_current()
+        super(Image, self).save(*args, **kwargs)
+
 class FeedHit(models.Model):
-    
     request_data = models.TextField()
     created = models.DateTimeField(default=datetime.now)
-
+    site = models.ForeignKey(Site, blank=True, null=True)
+    
+    objects = SiteManager()
+    
+    def save(self, *args, **kwargs):
+        self.site = Site.objects.get_current()
+        super(Image, self).save(*args, **kwargs)
