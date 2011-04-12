@@ -1,10 +1,14 @@
-{% extends "biblion/blog_base.html" %}
+{% extends "servee_blog/blog_base.html" %}
+{% load frontendadmin_tags %}
+
 {% block head_title %}{{ post.title }} &mdash; {{ block.super }}{% endblock %}
 
 
 {% block primary %}
 	<div class="blogPost">
     <h2>{{ post.title }}</h2>
+    {% frontendadmin_change post "Change Post" %}
+    
 	{% if post.images.count > 0 %}
 	<div class="floatBox">
 	{% for im in post.images.all %}
@@ -14,7 +18,7 @@
 	{% endif %}
    
     {{ post.content_html|safe }}
-    {% include "biblion/dateline.html" %}  
+    {% include "servee_blog/dateline.html" %}  
     </div>  
 {% endblock %}
 

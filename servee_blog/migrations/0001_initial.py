@@ -23,12 +23,12 @@ class Migration(SchemaMigration):
             ('published', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('view_count', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
-        db.send_create_signal('biblion', ['Post'])
+        db.send_create_signal('servee_blog', ['Post'])
 
         # Adding model 'Revision'
         db.create_table('biblion_revision', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('post', self.gf('django.db.models.fields.related.ForeignKey')(related_name='revisions', to=orm['biblion.Post'])),
+            ('post', self.gf('django.db.models.fields.related.ForeignKey')(related_name='revisions', to=orm['servee_blog.Post'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=90)),
             ('teaser', self.gf('django.db.models.fields.TextField')()),
             ('content', self.gf('django.db.models.fields.TextField')()),
@@ -37,17 +37,17 @@ class Migration(SchemaMigration):
             ('published', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('view_count', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
-        db.send_create_signal('biblion', ['Revision'])
+        db.send_create_signal('servee_blog', ['Revision'])
 
         # Adding model 'Image'
         db.create_table('biblion_image', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('post', self.gf('django.db.models.fields.related.ForeignKey')(related_name='images', to=orm['biblion.Post'])),
+            ('post', self.gf('django.db.models.fields.related.ForeignKey')(related_name='images', to=orm['servee_blog.Post'])),
             ('image_path', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
             ('url', self.gf('django.db.models.fields.CharField')(max_length=150, blank=True)),
             ('timestamp', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
         ))
-        db.send_create_signal('biblion', ['Image'])
+        db.send_create_signal('servee_blog', ['Image'])
 
         # Adding model 'FeedHit'
         db.create_table('biblion_feedhit', (
@@ -55,7 +55,7 @@ class Migration(SchemaMigration):
             ('request_data', self.gf('django.db.models.fields.TextField')()),
             ('created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
         ))
-        db.send_create_signal('biblion', ['FeedHit'])
+        db.send_create_signal('servee_blog', ['FeedHit'])
 
 
     def backwards(self, orm):
@@ -103,21 +103,21 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'biblion.feedhit': {
+        'servee_blog.feedhit': {
             'Meta': {'object_name': 'FeedHit'},
             'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'request_data': ('django.db.models.fields.TextField', [], {})
         },
-        'biblion.image': {
+        'servee_blog.image': {
             'Meta': {'object_name': 'Image'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image_path': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': "orm['biblion.Post']"}),
+            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': "orm['servee_blog.Post']"}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'url': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'})
         },
-        'biblion.post': {
+        'servee_blog.post': {
             'Meta': {'ordering': "('-published',)", 'object_name': 'Post'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'posts'", 'to': "orm['auth.User']"}),
             'content_html': ('django.db.models.fields.TextField', [], {}),
@@ -132,12 +132,12 @@ class Migration(SchemaMigration):
             'updated': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'view_count': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
-        'biblion.revision': {
+        'servee_blog.revision': {
             'Meta': {'object_name': 'Revision'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': "orm['auth.User']"}),
             'content': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': "orm['biblion.Post']"}),
+            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': "orm['servee_blog.Post']"}),
             'published': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'teaser': ('django.db.models.fields.TextField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '90'}),
@@ -153,4 +153,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['biblion']
+    complete_apps = ['servee_blog']

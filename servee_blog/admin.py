@@ -1,10 +1,7 @@
 from django.contrib import admin
 from django.conf import settings
-from django.utils.functional import curry
 
-from biblion.models import Post, Image, Section
-from biblion.forms import AdminPostForm
-from biblion.utils import can_tweet
+from servee_blog.models import Post, Image, Section
 
 
 class ImageInline(admin.TabularInline):
@@ -19,18 +16,18 @@ class SectionAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):  
     list_display = ["title", "published_flag",]
     list_filter = ["sections",]
-    form = AdminPostForm
     fields = [
         "title",
         "slug",
         "author",
-        "teaser",
-        "content",
-        "publish",
+        "teaser_html",
+        "content_html",
+        "published",
         "sections",
     ]
-    if can_tweet():
-        fields.append("tweet")
+    exclude = [
+        "site",
+    ]
     prepopulated_fields = {"slug": ("title",)}
     inlines = [
         ImageInline,
@@ -45,11 +42,6 @@ class PostAdmin(admin.ModelAdmin):
         return bool(obj.published)
     published_flag.short_description = "Published"
     published_flag.boolean = True
-    
-    def save_form(self, request, form, change):
-        # this is done for explicitness that we want form.save to commit
-        # form.save doesn't take a commit kwarg for this reason
-        return form.save()
 
 
 admin.site.register(Post, PostAdmin)

@@ -2,8 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models.query import Q
 
-from biblion.exceptions import InvalidSection
-from biblion.settings import ALL_SECTION_NAME
+from servee_blog.exceptions import InvalidSection
+from servee_blog.settings import ALL_SECTION_NAME
 
 class SiteManager(models.Manager):
     """

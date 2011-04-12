@@ -1,6 +1,6 @@
 from django import template
 
-from biblion.models import Post, Section
+from servee_blog.models import Post, Section
 
 
 register = template.Library()

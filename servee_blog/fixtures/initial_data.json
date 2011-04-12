@@ -1,6 +1,6 @@
 [
     {
-        "model": "biblion.Section",
+        "model": "servee_blog.Section",
         "pk": 1,
         "fields": {
             "name": "All",

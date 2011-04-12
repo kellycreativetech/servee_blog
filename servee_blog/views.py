@@ -9,12 +9,12 @@ from django.utils import simplejson as json
 
 from django.contrib.sites.models import Site
 
-from biblion.exceptions import InvalidSection
-from biblion.models import Post, FeedHit, Section
-from biblion.settings import ALL_SECTION_NAME
+from servee_blog.exceptions import InvalidSection
+from servee_blog.models import Post, Section
+from servee_blog.settings import ALL_SECTION_NAME
 
 
-def blog_index(request, template="biblion/blog_list.html"):
+def blog_index(request, template="servee_blog/blog_list.html"):
     
     posts = Post.objects.current()
     
@@ -23,7 +23,7 @@ def blog_index(request, template="biblion/blog_list.html"):
     }, context_instance=RequestContext(request))
 
 
-def blog_section_list(request, section, template="biblion/blog_section_list.html"):
+def blog_section_list(request, section, template="servee_blog/blog_section_list.html"):
     
     section = get_object_or_404(Section, slug=section)
     
@@ -51,9 +51,8 @@ def blog_post_detail(request, **kwargs):
             published__day = int(kwargs["day"]),
         )
         post = get_object_or_404(queryset, slug=kwargs["slug"])
-        post.inc_views()
     
-    return render_to_response("biblion/blog_post.html", {
+    return render_to_response("servee_blog/blog_post.html", {
         "post": post,
     }, context_instance=RequestContext(request))
 
@@ -96,12 +95,7 @@ def blog_feed(request, section=None):
     else:
         feed_updated = datetime(2009, 8, 1, 0, 0, 0)
     
-    # create a feed hit
-    hit = FeedHit()
-    hit.request_data = serialize_request(request)
-    hit.save()
-    
-    atom = render_to_string("biblion/atom_feed.xml", {
+    atom = render_to_string("servee_blog/atom_feed.xml", {
         "feed_id": feed_url,
         "feed_title": feed_title,
         "blog_url": blog_url,

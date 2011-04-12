@@ -1,21 +1,12 @@
 # -*- coding: utf8 -*-
-import urllib2
-
 from datetime import datetime
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.utils import simplejson as json
 
 from django.contrib.sites.models import Site
-
-try:
-    import twitter
-except ImportError:
-    twitter = None
 
 if "taggit" in settings.INSTALLED_APPS:
     from taggit.managers import TaggableManager
@@ -23,9 +14,7 @@ else:
     def TaggableManager():
         return None
 
-from biblion.managers import PostManager, SiteManager
-from biblion.utils import can_tweet
-
+from servee_blog.managers import PostManager, SiteManager
 
 
 def ig(L, i):
@@ -46,26 +35,29 @@ class Section(models.Model):
         super(Section, self).save(*args, **kwargs)
     
     objects = SiteManager()
+    
+    class Meta:
+        ordering = ["name",]
+        # all of these reference the old table names.
+        db_table = "biblion_section"
+
 
 class Post(models.Model):
     
-    sections = models.ManyToManyField(Section, related_name="posts")
+    sections = models.ManyToManyField(Section, related_name="posts", blank=True)
     site = models.ForeignKey(Site, blank=True, null=True)
     
     title = models.CharField(max_length=90)
     slug = models.SlugField()
     author = models.ForeignKey(User, related_name="posts")
     
-    teaser_html = models.TextField(editable=False)
-    content_html = models.TextField(editable=False)
-    
-    tweet_text = models.CharField(max_length=140, editable=False)
+    teaser_html = models.TextField()
+    content_html = models.TextField()
     
     created = models.DateTimeField(default=datetime.now, editable=False) # when first revision was created
     updated = models.DateTimeField(null=True, blank=True, editable=False) # when last revision was create (even if not published)
-    published = models.DateTimeField(null=True, blank=True, editable=False) # when last published
+    published = models.DateTimeField(null=True, blank=True) # when last published
     
-    view_count = models.IntegerField(default=0, editable=False)
     tags = TaggableManager()
     
     @staticmethod
@@ -102,42 +94,21 @@ class Post(models.Model):
     class Meta:
         ordering = ("-published",)
         get_latest_by = "published"
+        # all of these reference the old table names.
+        db_table = "biblion_post"
+        
     
     objects = PostManager()
     
     def __unicode__(self):
         return self.title
     
-    def as_tweet(self):
-        if not self.tweet_text:
-            current_site = Site.objects.get_current()
-            api_url = "http://api.tr.im/api/trim_url.json"
-            u = urllib2.urlopen("%s?url=http://%s%s" % (
-                api_url,
-                current_site.domain,
-                self.get_absolute_url(),
-            ))
-            result = json.loads(u.read())
-            self.tweet_text = u"%s %s — %s" % (
-                settings.TWITTER_TWEET_PREFIX,
-                self.title,
-                result["url"],
-            )
-        return self.tweet_text
-    
-    def tweet(self):
-        if can_tweet():
-            account = twitter.Api(
-                username = settings.TWITTER_USERNAME,
-                password = settings.TWITTER_PASSWORD,
-            )
-            account.PostUpdate(self.as_tweet())
-        else:
-            raise ImproperlyConfigured("Unable to send tweet due to either "
-                "missing python-twitter or required settings.")
-    
     def save(self, **kwargs):
         self.updated_at = datetime.now()
+        if not self.site:
+            self.site = Site.objects.get_current()
+        if self.published:
+            self.published = datetime.now()
         self.site = Site.objects.get_current()
         super(Post, self).save(**kwargs)
     
@@ -156,37 +127,6 @@ class Post(models.Model):
                 "post_pk": self.pk,
             }
         return reverse(name, kwargs=kwargs)
-    
-    def inc_views(self):
-        self.view_count += 1
-        self.save()
-        self.current().inc_views()
-
-
-class Revision(models.Model):
-    
-    post = models.ForeignKey(Post, related_name="revisions")
-    
-    title = models.CharField(max_length=90)
-    teaser = models.TextField()
-    
-    content = models.TextField()
-    
-    author = models.ForeignKey(User, related_name="revisions")
-    
-    updated = models.DateTimeField(default=datetime.now)
-    published = models.DateTimeField(null=True, blank=True)
-    
-    view_count = models.IntegerField(default=0, editable=False)
-    
-    # objects = SiteManager()
-    
-    def __unicode__(self):
-        return 'Revision %s for %s' % (self.updated.strftime('%Y%m%d-%H%M'), self.post.slug)
-    
-    def inc_views(self):
-        self.view_count += 1
-        self.save()
 
 
 class Image(models.Model):
@@ -203,6 +143,8 @@ class Image(models.Model):
     
     class Meta:
         ordering = ("image_path",)
+        # all of these reference the old table names.
+        db_table = "biblion_image"
     
     def __unicode__(self):
         if self.pk is not None:
@@ -210,17 +152,6 @@ class Image(models.Model):
         else:
             return "deleted image"
 
-    def save(self, *args, **kwargs):
-        self.site = Site.objects.get_current()
-        super(Image, self).save(*args, **kwargs)
-
-class FeedHit(models.Model):
-    request_data = models.TextField()
-    created = models.DateTimeField(default=datetime.now)
-    site = models.ForeignKey(Site, blank=True, null=True)
-    
-    objects = SiteManager()
-    
     def save(self, *args, **kwargs):
         self.site = Site.objects.get_current()
         super(Image, self).save(*args, **kwargs)

@@ -48,28 +48,28 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'biblion.feedhit': {
+        'servee_blog.feedhit': {
             'Meta': {'object_name': 'FeedHit'},
             'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'request_data': ('django.db.models.fields.TextField', [], {})
         },
-        'biblion.image': {
+        'servee_blog.image': {
             'Meta': {'object_name': 'Image'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image_path': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': "orm['biblion.Post']"}),
+            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': "orm['servee_blog.Post']"}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'url': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'})
         },
-        'biblion.post': {
+        'servee_blog.post': {
             'Meta': {'ordering': "('-published',)", 'object_name': 'Post'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'posts'", 'to': "orm['auth.User']"}),
             'content_html': ('django.db.models.fields.TextField', [], {}),
             'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'published': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'sections': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'posts'", 'symmetrical': 'False', 'to': "orm['biblion.Section']"}),
+            'sections': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'posts'", 'symmetrical': 'False', 'to': "orm['servee_blog.Section']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
             'teaser_html': ('django.db.models.fields.TextField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '90'}),
@@ -77,19 +77,19 @@ class Migration(SchemaMigration):
             'updated': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'view_count': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
-        'biblion.revision': {
+        'servee_blog.revision': {
             'Meta': {'object_name': 'Revision'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': "orm['auth.User']"}),
             'content': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': "orm['biblion.Post']"}),
+            'post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'revisions'", 'to': "orm['servee_blog.Post']"}),
             'published': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'teaser': ('django.db.models.fields.TextField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '90'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'view_count': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
-        'biblion.section': {
+        'servee_blog.section': {
             'Meta': {'object_name': 'Section'},
             'content': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -118,4 +118,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['biblion']
+    complete_apps = ['servee_blog']
