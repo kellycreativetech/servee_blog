@@ -56,7 +56,7 @@ class Post(models.Model):
     
     created = models.DateTimeField(default=datetime.now, editable=False) # when first revision was created
     updated = models.DateTimeField(null=True, blank=True, editable=False) # when last revision was create (even if not published)
-    published = models.DateTimeField(null=True, blank=True) # when last published
+    published = models.DateTimeField(null=True, blank=True) # original publish datetime
     
     tags = TaggableManager()
     
@@ -107,8 +107,6 @@ class Post(models.Model):
         self.updated_at = datetime.now()
         if not self.site:
             self.site = Site.objects.get_current()
-        if self.published:
-            self.published = datetime.now()
         self.site = Site.objects.get_current()
         super(Post, self).save(**kwargs)
     

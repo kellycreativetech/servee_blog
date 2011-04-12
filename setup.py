@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name = "servee_blog",
-    version = "0.1.1.dev9",
+    version = "0.1.1.dev10",
     author = "Servee LLC, Bibilion (the base) originally by Eldarion",
     author_email = "issac@servee.com",
     description = "The Servee Blog was originally extacted from servee_blog",
