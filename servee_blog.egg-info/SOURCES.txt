@@ -1,5 +1,6 @@
 MANIFEST.in
 README.rst
+setup.py
 servee_blog/__init__.py
 servee_blog/admin.py
 servee_blog/exceptions.py
