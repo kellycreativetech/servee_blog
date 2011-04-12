@@ -1,3 +1,9 @@
+===========
+Servee Blog
+===========
+
+The Servee blog was originally grown out of Biblion, made by Eldarion
+
 ==============
 Biblion README
 ==============

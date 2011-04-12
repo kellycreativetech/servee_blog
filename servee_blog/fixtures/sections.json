@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 1, 
+        "model": "servee_blog.section", 
+        "fields": {
+            "slug": "all",
+            "name": "All"
+        }
+    }
+]

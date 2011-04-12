@@ -1,0 +1,40 @@
+Metadata-Version: 1.0
+Name: servee-blog
+Version: 0.1.1.dev9
+Summary: The Servee Blog was originally extacted from servee_blog
+Home-page: http://github.com/servee/servee_blog
+Author: Servee LLC, Bibilion (the base) originally by Eldarion
+Author-email: issac@servee.com
+License: BSD
+Description: ===========
+        Servee Blog
+        ===========
+        
+        The Servee blog was originally grown out of Biblion, made by Eldarion
+        
+        ==============
+        Biblion README
+        ==============
+        
+        Biblion was the eldarion.com blog which we've extracted and open sourced. It
+        is currently positioned as being used for site/project blogs such as
+        eldarion.com and pinaxproject.com. We intend for this app to replace the
+        internal Pinax blog app once we've made it feature complete.
+        
+        
+        Current features include:
+        
+         * support for multiple channels (e.g. technical vs business)
+         * use of Creole as markup format
+         * Atom feeds
+         * previewing of blog posts before publishing
+         * optional ability to announce new posts on twitter
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Framework :: Django
